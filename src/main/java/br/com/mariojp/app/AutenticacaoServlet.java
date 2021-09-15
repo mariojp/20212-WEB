@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 
 import com.sun.jdi.request.VMDeathRequest;
 
+import br.com.mariojp.app.model.Usuario;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,28 +21,35 @@ public class AutenticacaoServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 
-	private String usuario;
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		usuario =  request.getParameter("usuario"); 
+		String  usuario =  request.getParameter("usuario"); 
 		String senha = request.getParameter("senha"); 
 		
+		Usuario user = new Usuario(usuario, senha);
+		
 		PrintWriter out = response.getWriter();
-		if(usuario != null && usuario.equals(senha)){
+		if(autenticacao(user)){
+			request.getSession().setAttribute("usuario", user);
 			response.sendRedirect("./sistema.jsp");
-		}else if(usuario == null){
-			response.sendRedirect("./index.jsp");
 		} else{
 			request.setAttribute("erro", "Erro de login");
-
 			RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");			
 			dispatcher.forward(request, response);
-			//response.sendRedirect("./index.jsp?erro=erro");
 		}
 	
+	}
+	
+	private boolean autenticacao(Usuario usuario) {
+		if(usuario != null &&
+			usuario.getNome() != null &&
+			usuario.getNome().equals(usuario.getSenha())) {
+			return true;
+		}
+		return false;
 	}
 
 }
