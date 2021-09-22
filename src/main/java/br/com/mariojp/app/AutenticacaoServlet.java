@@ -3,7 +3,6 @@ package br.com.mariojp.app;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.sun.jdi.request.VMDeathRequest;
 
 import br.com.mariojp.app.model.Usuario;
 import jakarta.servlet.RequestDispatcher;
@@ -33,8 +32,10 @@ public class AutenticacaoServlet extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		if(autenticacao(user)){
+			
+			System.out.println("autenticado");
 			request.getSession().setAttribute("usuario", user);
-			response.sendRedirect("./sistema.jsp");
+			response.sendRedirect("./user/sistema.jsp");
 		} else{
 			request.setAttribute("erro", "Erro de login");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");			
