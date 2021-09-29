@@ -30,12 +30,12 @@ public class AutenticacaoServlet extends HttpServlet {
 		
 		Usuario user = new Usuario(usuario, senha);
 		
-		PrintWriter out = response.getWriter();
+	
 		if(autenticacao(user)){
 			
 			System.out.println("autenticado");
 			request.getSession().setAttribute("usuario", user);
-			response.sendRedirect("./user/sistema.jsp");
+			response.sendRedirect("./user/sistema");
 		} else{
 			request.setAttribute("erro", "Erro de login");
 			RequestDispatcher dispatcher = request.getRequestDispatcher("./index.jsp");			
